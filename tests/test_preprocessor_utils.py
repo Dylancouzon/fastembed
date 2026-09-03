@@ -63,3 +63,18 @@ def test_truncation_still_applies(tmp_path):
 
     assert tokenizer.truncation["max_length"] == 3
     assert len(tokenizer.encode("a b a b a b").ids) == 3
+
+
+def test_serialized_pad_token_without_tokenizer_config_entry(tmp_path):
+    """A tokenizer that serializes its own pad token must load even when tokenizer_config.json
+    has no "pad_token" key."""
+    model_dir = _write_model_dir(
+        tmp_path, padding={"length": 4, "pad_id": 0, "pad_token": "[PAD]"}
+    )
+    config = json.loads((model_dir / "tokenizer_config.json").read_text())
+    del config["pad_token"]
+    (model_dir / "tokenizer_config.json").write_text(json.dumps(config))
+
+    tokenizer, _ = load_tokenizer(model_dir)
+
+    assert tokenizer.padding["pad_token"] == "[PAD]"
