@@ -61,7 +61,12 @@ def load_tokenizer(model_dir: Path) -> tuple[Tokenizer, dict[str, int]]:
         direction=padding.get("direction", "right"),
         pad_id=padding.get("pad_id", config.get("pad_token_id", 0)),
         pad_type_id=padding.get("pad_type_id", 0),
-        pad_token=padding.get("pad_token", tokenizer_config["pad_token"]),
+        # not padding.get(..., tokenizer_config["pad_token"]): the default would be evaluated
+        # eagerly and raise KeyError for a tokenizer that serializes its own pad token but has
+        # no "pad_token" in tokenizer_config.json.
+        pad_token=(
+            padding["pad_token"] if "pad_token" in padding else tokenizer_config["pad_token"]
+        ),
         pad_to_multiple_of=padding.get("pad_to_multiple_of"),
     )
 
