@@ -50,10 +50,20 @@ def load_tokenizer(model_dir: Path) -> tuple[Tokenizer, dict[str, int]]:
 
     tokenizer = Tokenizer.from_file(str(tokenizer_path))
     tokenizer.enable_truncation(max_length=max_context)
-    if not tokenizer.padding:
-        tokenizer.enable_padding(
-            pad_id=config.get("pad_token_id", 0), pad_token=tokenizer_config["pad_token"]
-        )
+    # Always re-enable padding, never with a fixed `length`. A tokenizer.json carrying a fixed
+    # padding length shorter than the truncation limit (e.g. thenlper/gte-base: Fixed 128 against
+    # truncation 512) leaves every longer input unpadded AND untruncated, so a batch mixing one
+    # with a shorter text is ragged and np.array() raises "inhomogeneous shape". The remaining
+    # padding options are carried over from the tokenizer's own config, which is what lets
+    # left-padding models (e.g. colmodernvbert) keep their direction.
+    padding = tokenizer.padding or {}
+    tokenizer.enable_padding(
+        direction=padding.get("direction", "right"),
+        pad_id=padding.get("pad_id", config.get("pad_token_id", 0)),
+        pad_type_id=padding.get("pad_type_id", 0),
+        pad_token=padding.get("pad_token", tokenizer_config["pad_token"]),
+        pad_to_multiple_of=padding.get("pad_to_multiple_of"),
+    )
 
     for token in tokens_map.values():
         if isinstance(token, str):
