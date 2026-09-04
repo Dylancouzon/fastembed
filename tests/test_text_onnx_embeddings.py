@@ -82,6 +82,12 @@ CANONICAL_VECTOR_VALUES = {
     "google/siglip2-base-patch16-224": np.array(
         [-0.01181389, 0.00737596, 0.01118064, 0.0103095, 0.3451049]
     ),
+    "DylanCouzon/constella-zero": np.array(
+        [-0.00065711, -0.02646863, -0.03326607, 0.01312574, -0.01599784]
+    ),
+    "DylanCouzon/stella-en-400M-v5-doc-onnx": np.array(
+        [0.00934642, -0.00412083, -0.0927834, -0.00382371, -0.0415402]
+    ),
 }
 
 QWEN3_INSTRUCT_PREFIX = (
