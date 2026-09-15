@@ -7,7 +7,7 @@ from fastembed import (
     LateInteractionMultimodalEmbedding,
     LateInteractionTextEmbedding,
 )
-from fastembed.common.utils import last_token_pooling
+from fastembed.common.utils import last_token_pooling, mean_pooling
 
 
 def test_text_list_supported_models():
@@ -31,6 +31,18 @@ def test_text_list_supported_models():
         assert "model_file" in description and description["model_file"]
         assert "sources" in description and description["sources"]
         assert "hf" in description["sources"] or "url" in description["sources"]
+
+
+def test_mean_pooling_preserves_embedding_dtype():
+    token_embeddings = np.array(
+        [[[1.0, 2.0], [3.0, 4.0], [9.0, 9.0]]], dtype=np.float32
+    )
+    attention_mask = np.array([[1, 1, 0]], dtype=np.int64)
+
+    pooled = mean_pooling(token_embeddings, attention_mask)
+
+    assert pooled.dtype == token_embeddings.dtype
+    assert np.allclose(pooled, [[2.0, 3.0]])
 
 
 def test_last_token_pooling():
