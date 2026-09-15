@@ -159,7 +159,10 @@ class PooledNormalizedEmbedding(PooledEmbedding):
 
         embeddings = output.model_output
         attn_mask = output.attention_mask
-        return normalize(self.mean_pooling(embeddings, attn_mask))
+        # Normalize in the accumulator's precision, then return the graph's dtype: narrowing
+        # before normalize() would overflow the squared sum for float16 inputs.
+        pooled = normalize(self.mean_pooling(embeddings, attn_mask))
+        return pooled.astype(embeddings.dtype, copy=False)
 
 
 class PooledNormalizedEmbeddingWorker(OnnxTextEmbeddingWorker):

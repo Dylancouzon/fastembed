@@ -118,7 +118,10 @@ class PooledEmbedding(OnnxTextEmbedding):
 
         embeddings = output.model_output
         attn_mask = output.attention_mask
-        return self.mean_pooling(embeddings, attn_mask)
+        pooled = self.mean_pooling(embeddings, attn_mask)
+        # Pooling accumulates in float64 because the integer mask promotes the product.
+        # Return the dtype the graph produced, as every non-pooled path already does.
+        return pooled.astype(embeddings.dtype, copy=False)
 
 
 class PooledEmbeddingWorker(OnnxTextEmbeddingWorker):

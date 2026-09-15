@@ -29,7 +29,7 @@ def mean_pooling(input_array: NumpyArray, attention_mask: NDArray[np.int64]) -> 
     sum_embeddings = np.sum(input_array * input_mask_expanded, axis=1)
     sum_mask = np.sum(input_mask_expanded, axis=1)
     pooled_embeddings = sum_embeddings / np.maximum(sum_mask, 1e-9)
-    return pooled_embeddings.astype(input_array.dtype, copy=False)
+    return pooled_embeddings
 
 
 def last_token_pooling(input_array: NumpyArray, attention_mask: NDArray[np.int64]) -> NumpyArray:
