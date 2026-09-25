@@ -122,7 +122,7 @@ supported_pooled_normalized_models: list[DenseModelDescription] = [
         model_file="model.onnx",
     ),
     DenseModelDescription(
-        model="DylanCouzon/constella-nano",
+        model="Qdrant/constella-nano",
         dim=1024,
         description=(
             "Text embeddings, Unimodal (text), English, 512 input tokens truncation, "
@@ -131,7 +131,7 @@ supported_pooled_normalized_models: list[DenseModelDescription] = [
         ),
         license="mit",
         size_in_GB=0.14,
-        sources=ModelSource(hf="DylanCouzon/constella-nano"),
+        sources=ModelSource(hf="Qdrant/constella-nano"),
         model_file="model.onnx",
     ),
 ]

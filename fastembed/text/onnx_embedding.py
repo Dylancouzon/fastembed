@@ -181,7 +181,7 @@ supported_onnx_models: list[DenseModelDescription] = [
         model_file="onnx/text_model.onnx",
     ),
     DenseModelDescription(
-        model="DylanCouzon/constella-zero",
+        model="Qdrant/constella-zero",
         dim=1024,
         description=(
             "Text embeddings, Unimodal (text), English, 512 input tokens truncation, "
@@ -190,11 +190,11 @@ supported_onnx_models: list[DenseModelDescription] = [
         ),
         license="mit",
         size_in_GB=0.03,
-        sources=ModelSource(hf="DylanCouzon/constella-zero"),
+        sources=ModelSource(hf="Qdrant/constella-zero"),
         model_file="model.onnx",
     ),
     DenseModelDescription(
-        model="DylanCouzon/stella-en-400M-v5-doc-onnx",
+        model="Qdrant/stella-en-400M-v5-doc-onnx",
         dim=1024,
         description=(
             "Text embeddings, Unimodal (text), English, 512 input tokens truncation, "
@@ -203,7 +203,7 @@ supported_onnx_models: list[DenseModelDescription] = [
         ),
         license="mit",
         size_in_GB=1.75,
-        sources=ModelSource(hf="DylanCouzon/stella-en-400M-v5-doc-onnx"),
+        sources=ModelSource(hf="Qdrant/stella-en-400M-v5-doc-onnx"),
         model_file="model.onnx",
     ),
     DenseModelDescription(
